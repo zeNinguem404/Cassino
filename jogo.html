@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cassino 🎰</title>
+  <script>
+    async function jogar() {
+      const aposta = document.getElementById("numero").value;
+      const res = await fetch('php/aposta.php', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ aposta })
+      });
+      const data = await res.json();
+      document.getElementById("resultado").textContent = data.mensagem;
+      document.getElementById("saldo").textContent = "💰 Saldo: " + data.saldo + " moedas";
+    }
+  </script>
+</head>
+<body>
+  <h1>Bem-vindo ao Cassino 🎰</h1>
+  <div>
+    Aposta um número (0-36):
+    <input type="number" id="numero" min="0" max="36" />
+    <button onclick="jogar()">Girar 🎲</button>
+  </div>
+  <div id="resultado"></div>
+  <div id="saldo">Carregando saldo...</div>
+
+  <script>
+    fetch('php/saldo.php')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("saldo").textContent = "💰 Saldo: " + data.saldo + " moedas";
+      });
+  </script>
+</body>
+</html>
